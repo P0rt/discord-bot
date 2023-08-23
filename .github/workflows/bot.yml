@@ -24,6 +24,6 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run Discord Bot
-        run: python path_to_your_bot_file.py
+        run: python bot.py
         env:
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
