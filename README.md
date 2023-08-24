@@ -1,3 +1,4 @@
+[![Test](https://github.com/P0rt/discord-bot/actions/workflows/bot.yml/badge.svg)](https://github.com/P0rt/discord-bot/actions/workflows/bot.yml)
 ## Simple chat-bot
 
 ```
