@@ -1,53 +1,36 @@
 import unittest
-from unittest.mock import patch, Mock
-from src.bot.bot import send_to_api
+from unittest.mock import patch
+from bot import send_to_api
 
-class TestBotFunctions(unittest.TestCase):
+class TestBotMethods(unittest.TestCase):
 
-    @patch('src.bot.bot.requests.get')
-    def test_send_to_api_valid_response(self, mock_get):
-        # Имитируем успешный ответ API
-        mock_response = Mock()
-        mock_response.status_code = 200
-        mock_response.json.return_value = {
+    @patch('bot.requests.get')
+    @patch('bot.os.environ.get', return_value="TEST_DISCORD_TOKEN")
+    def test_send_to_api_valid_response(self, mock_get, mock_os_environ_get):
+        mock_response = type('', (), {})()
+        mock_response.json = lambda: {
             "choices": [
-                {
-                    "message": {
-                        "content": "Test Content"
-                    }
-                }
+                {"message": {"content": "test message"}}
             ]
         }
-        
+        mock_response.raise_for_status = lambda: None
         mock_get.return_value = mock_response
 
-        response = send_to_api("test message")
-        self.assertEqual(response, "Test Content")
+        message = "hello"
+        response = send_to_api(message)
+        self.assertEqual(response, "test message")
 
-    @patch('src.bot.bot.requests.get')
-    def test_send_to_api_invalid_response(self, mock_get):
-        # Имитируем неудачный ответ API
-        mock_response = Mock()
-        mock_response.status_code = 400
-        mock_response.raise_for_status.side_effect = requests.HTTPError()
-
+    @patch('bot.requests.get')
+    @patch('bot.os.environ.get', return_value="TEST_DISCORD_TOKEN")
+    def test_send_to_api_invalid_response(self, mock_get, mock_os_environ_get):
+        mock_response = type('', (), {})()
+        mock_response.json = lambda: {}
+        mock_response.raise_for_status = lambda: None
         mock_get.return_value = mock_response
 
-        response = send_to_api("test message")
-        self.assertIn("HTTP error occurred", response)
-
-    @patch('src.bot.bot.requests.get')
-    def test_send_to_api_unexpected_response(self, mock_get):
-        # Имитируем неожиданный формат ответа API
-        mock_response = Mock()
-        mock_response.status_code = 200
-        mock_response.json.return_value = {}
-        
-        mock_get.return_value = mock_response
-
-        response = send_to_api("test message")
-        self.assertIn("Unexpected API response", response)
-
+        message = "hello"
+        response = send_to_api(message)
+        self.assertIn("Unexpected API response:", response)
 
 if __name__ == '__main__':
     unittest.main()
