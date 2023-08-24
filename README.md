@@ -1,1 +1,1 @@
-## Simple chat-bot
+## Simple discord chat-bot
