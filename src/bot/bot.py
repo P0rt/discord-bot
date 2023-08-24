@@ -4,7 +4,7 @@ import requests
 import os
 
 TOKEN = os.environ.get('DISCORD_TOKEN')
-API_BASE_URL = 'http://144.76.41.116:1958/query/'
+API_BASE_URL = ''
 
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='!', intents=intents)
@@ -21,7 +21,6 @@ async def chat(ctx, *, message):
 
 def send_to_api(message):
     try:
-        # Кодируем сообщение для использования в URL
         encoded_message = requests.utils.quote(message)
         full_url = f"{API_BASE_URL}?q={encoded_message}"
 
