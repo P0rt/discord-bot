@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from bot import send_to_api
+from src.bot.bot import send_to_api
 
 class TestBotMethods(unittest.TestCase):
 
